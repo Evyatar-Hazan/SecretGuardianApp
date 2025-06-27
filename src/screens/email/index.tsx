@@ -1,69 +1,72 @@
-import { Text, View } from 'react-native';
-import Svg, { Path } from 'react-native-svg';
-
+import React, { useEffect } from 'react';
+import { Text, View, Alert } from 'react-native';
 import GlobalButton from '../../component/button/button';
 import Logo from '../../component/logo/logo';
 import styles from '../styles';
 import UserSelectionStyles from '../userSelection/userSelectionStyles';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList, ScreenEnum } from '../../navigation';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import EncryptedStorage from 'react-native-encrypted-storage';
+import GoogleLogo from '../../assets/svg/GoogleLogo';
 
-const GoogleLogo = () => (
-  <Svg width={24} height={25} viewBox="0 0 24 25" fill="none">
-    <Path
-      d="M23.094 10.4136L13.3046 10.4131C12.8724 10.4131 12.522 10.7634 12.522 11.1957V14.323C12.522 14.7552 12.8724 15.1056 13.3046 15.1056H18.8174C18.2137 16.6722 17.087 17.9842 15.6496 18.8178L18.0002 22.887C21.7709 20.7062 24.0002 16.8799 24.0002 12.5965C24.0002 11.9866 23.9553 11.5506 23.8653 11.0597C23.797 10.6867 23.4732 10.4136 23.094 10.4136Z"
-      fill="#167EE6"
-    />
-    <Path
-      d="M11.9998 19.8043C9.30193 19.8043 6.94675 18.3303 5.68182 16.1491L1.61279 18.4944C3.6835 22.0833 7.56259 24.5 11.9998 24.5C14.1765 24.5 16.2304 23.9139 17.9998 22.8926V22.887L15.6491 18.8178C14.5739 19.4414 13.3297 19.8043 11.9998 19.8043Z"
-      fill="#12B347"
-    />
-    <Path
-      d="M18 22.8926V22.887L15.6494 18.8178C14.5741 19.4414 13.33 19.8044 12 19.8044V24.5C14.1767 24.5 16.2308 23.9139 18 22.8926Z"
-      fill="#0F993E"
-    />
-    <Path
-      d="M4.69566 12.5C4.69566 11.1702 5.05856 9.9261 5.68205 8.85093L1.61302 6.50558C0.586031 8.26935 0 10.3177 0 12.5C0 14.6823 0.586031 16.7307 1.61302 18.4944L5.68205 16.1491C5.05856 15.0739 4.69566 13.8298 4.69566 12.5Z"
-      fill="#FFD500"
-    />
-    <Path
-      d="M11.9998 5.19566C13.759 5.19566 15.375 5.82078 16.6372 6.86061C16.9486 7.11711 17.4012 7.09859 17.6864 6.81336L19.9022 4.59758C20.2258 4.27395 20.2028 3.74422 19.8571 3.44431C17.7423 1.60967 14.9907 0.5 11.9998 0.5C7.56259 0.5 3.6835 2.91673 1.61279 6.50558L5.68182 8.85092C6.94675 6.66969 9.30193 5.19566 11.9998 5.19566Z"
-      fill="#FF4B26"
-    />
-    <Path
-      d="M16.6374 6.86061C16.9488 7.11711 17.4015 7.09859 17.6866 6.81336L19.9024 4.59758C20.226 4.27395 20.2029 3.74422 19.8573 3.44431C17.7425 1.60963 14.991 0.5 12 0.5V5.19566C13.7592 5.19566 15.3752 5.82078 16.6374 6.86061Z"
-      fill="#D93F21"
-    />
-  </Svg>
-);
 
 type ScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
   ScreenEnum.SecretGuardianEmail
 >;
 
-
 const Email: React.FC<{ navigation: ScreenNavigationProp }> = ({ navigation }) => {
-  const onNext = () => {
-    navigation.navigate(ScreenEnum.SecretGuardianVerificationCode);
+
+  // אתחול הגדרות Google Signin
+  useEffect(() => {
+    GoogleSignin.configure({
+      webClientId: '23851303614-dhksd3kh0sjl51lmuf1gsieb10lhoj8o.apps.googleusercontent.com',
+      scopes: ['https://www.googleapis.com/auth/drive.file'],
+      offlineAccess: true,
+    });
+  }, []);
+
+  const onNext = async () => {
+    try {
+      console.log('Attempting to sign in with Google...');
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+      console.log('User Info:', userInfo);
+      const tokens = await GoogleSignin.getTokens();
+      console.log('Tokens:', tokens);
+
+      if ('refreshToken' in tokens && tokens.refreshToken) {
+        EncryptedStorage.setItem('refresh_token', String(tokens.refreshToken));
+      }
+
+      if (userInfo.data && userInfo.data.user && userInfo.data.user.email) {
+        await EncryptedStorage.setItem('user_email', userInfo.data.user.email);
+      } else {
+        throw new Error('User data or email is missing.');
+      }
+
+      navigation.navigate(ScreenEnum.SecretGuardianEvidenceType);
+    } catch (error) {
+      console.error('Login error:', error);
+      Alert.alert('ההתחברות נכשלה. נסה/י שוב.', (error as Error).toString());
+    }
   };
 
-  return(
-  <View style={styles().container}>
-    <Logo />
-
-    <GlobalButton
-      text="התחבר/י באמצעות חשבון גוגל"
-      textStyle={{ fontSize: 16 }}
-      color="white"
-      textColor="#2D4059"
-      onPress={onNext}
-      Icon={<GoogleLogo />}
-    />
-
-    <Text style={UserSelectionStyles.text}>הכול נשמר במקום בטוח</Text>
-  </View>
-);
-}
+  return (
+    <View style={styles().container}>
+      <Logo />
+      <GlobalButton
+        text="התחבר/י באמצעות חשבון גוגל"
+        textStyle={{ fontSize: 16 }}
+        color="white"
+        textColor="#2D4059"
+        onPress={onNext}
+        Icon={<GoogleLogo />}
+      />
+      <Text style={UserSelectionStyles.text}>הכול נשמר במקום בטוח</Text>
+    </View>
+  );
+};
 
 export default Email;
