@@ -7,7 +7,8 @@ import VerificationCode from '../screens/verificationCode';
 import EvidenceType from '../screens/evidenceType';
 import Success from '../screens/success';
 import YoungGuardian from '../screens/youngGuardian';
-import CameraComponent from '../screens/image';
+import CameraComponent from '../screens/camera';
+import AudioRecorder from '../screens/audioRecorder';
 
 
 
@@ -20,6 +21,7 @@ export type RootStackParamList = {
   SecretGuardianSuccess: undefined;
   SecretGuardianYoungGuardian: undefined;
   SecretGuardianCamera: undefined;
+  SecretGuardianAudioRecorder: undefined;
 };
 
 export enum ScreenEnum {
@@ -31,6 +33,7 @@ export enum ScreenEnum {
   SecretGuardianSuccess = 'SecretGuardianSuccess',
   SecretGuardianYoungGuardian = 'SecretGuardianYoungGuardian',
   SecretGuardianCamera = 'SecretGuardianCamera',
+  SecretGuardianAudioRecorder = 'SecretGuardianAudioRecorder',
 }
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -46,6 +49,7 @@ const SecretGuardianNavigation = () => {
       <Stack.Screen name={ScreenEnum.SecretGuardianSuccess} component={Success} />
       <Stack.Screen name={ScreenEnum.SecretGuardianYoungGuardian} component={YoungGuardian} />
       <Stack.Screen name={ScreenEnum.SecretGuardianCamera} component={CameraComponent} />
+      <Stack.Screen name={ScreenEnum.SecretGuardianAudioRecorder} component={AudioRecorder} />
     </Stack.Navigator>
     </NavigationContainer>
   );

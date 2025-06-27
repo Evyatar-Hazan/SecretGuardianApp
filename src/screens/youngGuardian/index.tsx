@@ -92,10 +92,25 @@ type ScreenNavigationProp = StackNavigationProp<
   ScreenEnum.SecretGuardianYoungGuardian
 >;
 
+type ItemType = 'image' | 'audio' | 'video';
 
 const YoungGuardian: React.FC<{ navigation: ScreenNavigationProp }> = ({ navigation }) => {
-  const onNext = () => {
+
+  const onNext = (item: ItemType) => {
    navigation.navigate(ScreenEnum.SecretGuardianCamera);
+   switch (item) {
+      case 'image':
+        navigation.navigate(ScreenEnum.SecretGuardianCamera);
+        break;
+      case 'audio':
+        navigation.navigate(ScreenEnum.SecretGuardianAudioRecorder);
+        break;
+      case 'video':
+        navigation.navigate(ScreenEnum.SecretGuardianCamera);
+        break;
+      default:
+        console.warn('Unknown item type');
+    }
   };
 
   return(
@@ -128,13 +143,13 @@ const YoungGuardian: React.FC<{ navigation: ScreenNavigationProp }> = ({ navigat
           justifyContent: 'space-between',
           marginTop: 50,
         }}>
-        <ColoredIconBox onPress={() => onNext()} backgroundColor="#FF6868">
+        <ColoredIconBox onPress={() => onNext("image")} backgroundColor="#FF6868">
           <ImageIcon />
         </ColoredIconBox>
-        <ColoredIconBox backgroundColor="#FFC056">
+        <ColoredIconBox onPress={() => onNext("audio")} backgroundColor="#FFC056">
           <AudioIcon />
         </ColoredIconBox>
-        <ColoredIconBox backgroundColor="#399E91">
+        <ColoredIconBox onPress={() => onNext("video")} backgroundColor="#399E91">
           <CameraIcon />
         </ColoredIconBox>
       </View>
