@@ -1,12 +1,32 @@
 {
-    "home": {
-      "welcome": "Welcome to the Home Screen",
-      "subtitle": "Here you can see demonstrations of various components you built.",
-      "languageSwitcherTitle": "Language Switcher",
-      "languageSwitcherDescription": "Pick a language and marvel as everything magically translates."
-    },
-    "languages": {
-      "en": "English",
-      "he": "עברית"
-    }
+  "languages": {
+    "en": "English",
+    "he": "עברית"
+  },
+  "userSelection": {
+    "parentLogin": "Parent Login",
+    "parentLoginMessage": "Parent login and Google Drive authentication are required first",
+    "startDocumentation": "Start Documentation"
+  },
+  "email": {
+    "loginWithGoogle": "Sign in with Google account",
+    "secureStorage": "Everything is stored securely",
+    "loginFailed": "Login failed. Please try again."
+  },
+  "evidenceType": {
+    "parentLogin": "Parent Login",
+    "childDocumentationQuestion": "What type of documentation would you like to allow your child?",
+    "save": "Save"
+  },
+  "youngGuardian": {
+    "title": "The Young Secret Guardian",
+    "question": "What type of content would you like to document?",
+    "secretMessage": "Send a secret recording",
+    "activate": "Activate"
+  },
+  "success": {
+    "title": "The Secret Guardian is Ready!",
+    "description": "The settings are saved. If the child chooses to document – everything will be stored safely and sent only to you.",
+    "button": "Save"
+  }
 }

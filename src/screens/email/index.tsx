@@ -9,7 +9,8 @@ import { RootStackParamList, ScreenEnum } from '../../navigation';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import GoogleLogo from '../../assets/svg/GoogleLogo';
-
+import ScreenWrapper from '../../component/screenWrapper';
+import { useTranslation } from 'react-i18next';
 
 type ScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -17,8 +18,8 @@ type ScreenNavigationProp = StackNavigationProp<
 >;
 
 const Email: React.FC<{ navigation: ScreenNavigationProp }> = ({ navigation }) => {
+  const { t } = useTranslation();
 
-  // אתחול הגדרות Google Signin
   useEffect(() => {
     GoogleSignin.configure({
       webClientId: '23851303614-dhksd3kh0sjl51lmuf1gsieb10lhoj8o.apps.googleusercontent.com',
@@ -49,23 +50,25 @@ const Email: React.FC<{ navigation: ScreenNavigationProp }> = ({ navigation }) =
       navigation.navigate(ScreenEnum.SecretGuardianEvidenceType);
     } catch (error) {
       console.error('Login error:', error);
-      Alert.alert('ההתחברות נכשלה. נסה/י שוב.', (error as Error).toString());
+      Alert.alert(t('email.loginFailed'), (error as Error).toString());
     }
   };
 
   return (
-    <View style={styles().container}>
-      <Logo />
-      <GlobalButton
-        text="התחבר/י באמצעות חשבון גוגל"
-        textStyle={{ fontSize: 16 }}
-        color="white"
-        textColor="#2D4059"
-        onPress={onNext}
-        Icon={<GoogleLogo />}
-      />
-      <Text style={UserSelectionStyles.text}>הכול נשמר במקום בטוח</Text>
-    </View>
+    <ScreenWrapper>
+      <View style={styles().container}>
+        <Logo />
+        <GlobalButton
+          text={t('email.loginWithGoogle')}
+          textStyle={{ fontSize: 16 }}
+          color="white"
+          textColor="#2D4059"
+          onPress={onNext}
+          Icon={<GoogleLogo />}
+        />
+        <Text style={UserSelectionStyles.text}>{t('email.secureStorage')}</Text>
+      </View>
+    </ScreenWrapper>
   );
 };
 
