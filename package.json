@@ -13,7 +13,10 @@
     "start": "react-native start",
     "test": "jest",
     "prepare": "husky install",
-    "tSort": "node -p \"require('./scripts/tSort.js');\" && prettier --write src"
+    "tSort": "node -p \"require('./scripts/tSort.js');\" && prettier --write src",
+    "release-apk": "cd android/ && ./gradlew app:assembleRelease && cd ..",
+    "release-aab": "cd android/ && ./gradlew bundleRelease && cd ..",
+    "clean": "cd android/ && ./gradlew clean && cd .."
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^2.2.0",
