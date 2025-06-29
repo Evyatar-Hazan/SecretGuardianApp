@@ -9,6 +9,7 @@ import Success from '../screens/success';
 import YoungGuardian from '../screens/youngGuardian';
 import CameraComponent from '../screens/camera';
 import AudioRecorder from '../screens/audioRecorder';
+import CustomDrawerContent from '../component/customDrawerContent';
 
 export type RootStackParamList = {
   SecretGuardianUserSelection: undefined;
@@ -50,7 +51,8 @@ const SecretGuardianNavigation = () => {
     <NavigationContainer>
       <Drawer.Navigator
         screenOptions={{ headerShown: false }}
-        initialRouteName="Main"
+        initialRouteName="Main" 
+        drawerContent={(props) => <CustomDrawerContent {...props} />}
       >
         <Drawer.Screen
           name="Main"
