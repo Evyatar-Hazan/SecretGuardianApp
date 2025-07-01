@@ -8,7 +8,7 @@ import he from './locales/he.json';
 export const supportedLanguages = ['en', 'he']; // Because two languages are clearly enough for world domination.
 const LANGUAGE_KEY = 'app-language'; // Shh... this is the sacred key that determines your app's dialect.
 
-const fallbackLang = 'en'; // When all else fails, pretend the user is British (or American, we don’t judge).
+const fallbackLang = 'he'; // When all else fails, pretend the user is British (or American, we don’t judge).
 
 const getStoredLang = async (): Promise<string> => {
     const lang = await AsyncStorage.getItem(LANGUAGE_KEY); // Try to remember what the user once told us. 
